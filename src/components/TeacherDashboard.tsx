@@ -72,53 +72,11 @@ export const TeacherDashboard = () => {
       <div className="max-w-6xl mx-auto space-y-6">
         
         {/* Header */}
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-2">Teacher Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage your live polling session and engage with students
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-semibold text-foreground mb-2">Teacher Dashboard</h1>
+          <p className="text-muted-foreground text-sm">
+            Manage your polls and engage with students
           </p>
-        </div>
-
-        {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Connected Students */}
-          <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-primary/20 rounded-lg">
-                <Users className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{students.length}</p>
-                <p className="text-sm text-muted-foreground">Connected Students</p>
-              </div>
-            </div>
-          </Card>
-
-          {/* Voting Progress */}
-          <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-success/20 rounded-lg">
-                <BarChart3 className="w-6 h-6 text-success" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{Math.round(votingProgress)}%</p>
-                <p className="text-sm text-muted-foreground">Voting Progress</p>
-              </div>
-            </div>
-          </Card>
-
-          {/* Active Poll Status */}
-          <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-            <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-lg ${activePoll ? 'bg-success/20' : 'bg-muted/20'}`}>
-                <Clock className={`w-6 h-6 ${activePoll ? 'text-success' : 'text-muted-foreground'}`} />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{activePoll ? 'Active' : 'None'}</p>
-                <p className="text-sm text-muted-foreground">Poll Status</p>
-              </div>
-            </div>
-          </Card>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
@@ -127,12 +85,12 @@ export const TeacherDashboard = () => {
           <div className="space-y-6">
             
             {/* Create Poll Section */}
-            <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
+            <Card className="p-6 bg-card border border-border shadow-card">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold">Poll Management</h3>
+                <h3 className="text-lg font-semibold text-foreground">Poll Management</h3>
                 {activePoll && (
                   <Badge variant="secondary" className="bg-success/20 text-success">
-                    Poll Active
+                    Active
                   </Badge>
                 )}
               </div>
@@ -146,12 +104,12 @@ export const TeacherDashboard = () => {
 
               {/* Current Poll Info */}
               {activePoll && (
-                <div className="mb-6 p-4 bg-muted/20 rounded-lg border border-border/20">
-                  <h4 className="font-semibold mb-2">Current Question:</h4>
+                <div className="mb-6 p-4 bg-muted rounded-lg">
+                  <h4 className="font-medium mb-2 text-foreground">Current Question:</h4>
                   <p className="text-sm text-muted-foreground mb-3">{activePoll.question}</p>
                   <div className="space-y-1">
                     {activePoll.options.map((option, index) => (
-                      <div key={index} className="text-sm">
+                      <div key={index} className="text-sm text-foreground">
                         <strong>{String.fromCharCode(65 + index)}.</strong> {option}
                       </div>
                     ))}
@@ -164,7 +122,7 @@ export const TeacherDashboard = () => {
                 {!activePoll && (
                   <Button
                     onClick={() => setShowCreateForm(true)}
-                    className="w-full bg-gradient-primary hover:bg-primary/90"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     <PlusCircle className="w-4 h-4 mr-2" />
                     Create New Poll
@@ -182,7 +140,7 @@ export const TeacherDashboard = () => {
                       Show Results Now
                     </Button>
                     <p className="text-xs text-muted-foreground text-center">
-                      Waiting for all students to vote...
+                      {votes.length} of {students.length} students have voted
                     </p>
                   </div>
                 )}
@@ -190,7 +148,7 @@ export const TeacherDashboard = () => {
                 {activePoll && canCreateNewPoll && (
                   <Button
                     onClick={() => setShowCreateForm(true)}
-                    className="w-full bg-gradient-primary hover:bg-primary/90"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     <PlusCircle className="w-4 h-4 mr-2" />
                     Create New Poll
@@ -211,8 +169,8 @@ export const TeacherDashboard = () => {
             </Card>
 
             {/* Students List */}
-            <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-              <h3 className="text-xl font-semibold mb-4">Connected Students</h3>
+            <Card className="p-6 bg-card border border-border shadow-card">
+              <h3 className="text-lg font-semibold mb-4 text-foreground">Connected Students ({students.length})</h3>
               
               {students.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
@@ -225,13 +183,13 @@ export const TeacherDashboard = () => {
                   {students.map((student) => (
                     <div
                       key={student.name}
-                      className="flex items-center justify-between p-3 bg-muted/20 rounded-lg border border-border/20"
+                      className="flex items-center justify-between p-3 bg-muted rounded-lg"
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-3 h-3 rounded-full ${
                           student.hasVoted ? 'bg-success' : 'bg-muted-foreground'
                         }`} />
-                        <span className="font-medium">{student.name}</span>
+                        <span className="font-medium text-foreground">{student.name}</span>
                         {student.hasVoted && (
                           <Badge variant="secondary" className="bg-success/20 text-success text-xs">
                             <CheckCircle className="w-3 h-3 mr-1" />
@@ -256,8 +214,23 @@ export const TeacherDashboard = () => {
 
           {/* Right Column - Results */}
           <div>
-            {activePoll && resultsVisible && (
-              <PollResults />
+            {activePoll && resultsVisible ? (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">Poll Results</h3>
+                <PollResults />
+              </div>
+            ) : (
+              <Card className="p-8 bg-card border border-border shadow-card text-center">
+                <div className="space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
+                    <BarChart3 className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground">No Results Yet</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Results will appear here once you show them or the poll ends
+                  </p>
+                </div>
+              </Card>
             )}
           </div>
         </div>

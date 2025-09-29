@@ -80,17 +80,17 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
-      <Card className="w-full max-w-2xl bg-gradient-card border-border/20 shadow-card max-h-[90vh] overflow-y-auto">
+      <Card className="w-full max-w-2xl bg-card border border-border shadow-card max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Create New Poll</h2>
+            <h2 className="text-xl font-semibold text-foreground">Create New Poll</h2>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={onClose}
-              className="hover:bg-muted/20"
+              className="hover:bg-muted"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -101,7 +101,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
             
             {/* Poll Question */}
             <div className="space-y-2">
-              <Label htmlFor="question" className="text-sm font-medium">
+              <Label htmlFor="question" className="text-sm font-medium text-foreground">
                 Poll Question *
               </Label>
               <Textarea
@@ -109,7 +109,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
                 placeholder="Enter your poll question here..."
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                className="min-h-[80px] resize-none bg-input border-border text-foreground placeholder:text-muted-foreground focus:ring-primary focus:border-primary"
+                className="min-h-[80px] resize-none bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-primary focus:border-primary"
                 maxLength={200}
                 required
               />
@@ -121,7 +121,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
             {/* Poll Options */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium">
+                <Label className="text-sm font-medium text-foreground">
                   Answer Options * (2-6 options)
                 </Label>
                 <div className="flex items-center space-x-2">
@@ -158,7 +158,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
                       placeholder={`Option ${String.fromCharCode(65 + index)}`}
                       value={option}
                       onChange={(e) => updateOption(index, e.target.value)}
-                      className="flex-1 bg-input border-border text-foreground placeholder:text-muted-foreground focus:ring-primary focus:border-primary"
+                      className="flex-1 bg-background border-border text-foreground placeholder:text-muted-foreground focus:ring-primary focus:border-primary"
                       maxLength={100}
                     />
                   </div>
@@ -168,7 +168,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
 
             {/* Time Limit */}
             <div className="space-y-2">
-              <Label htmlFor="timeLimit" className="text-sm font-medium flex items-center">
+              <Label htmlFor="timeLimit" className="text-sm font-medium flex items-center text-foreground">
                 <Clock className="w-4 h-4 mr-2" />
                 Time Limit (seconds)
               </Label>
@@ -180,7 +180,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
                   max="600"
                   value={timeLimit}
                   onChange={(e) => setTimeLimit(parseInt(e.target.value) || 60)}
-                  className="w-32 bg-input border-border text-foreground focus:ring-primary focus:border-primary"
+                  className="w-32 bg-background border-border text-foreground focus:ring-primary focus:border-primary"
                 />
                 <div className="flex space-x-2">
                   <Button
@@ -231,7 +231,7 @@ export const CreatePollForm = ({ onClose }: CreatePollFormProps) => {
               <Button
                 type="submit"
                 disabled={!question.trim() || options.filter(o => o.trim()).length < 2 || isSubmitting}
-                className="flex-1 bg-gradient-primary hover:bg-primary/90"
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">

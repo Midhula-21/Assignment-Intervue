@@ -60,189 +60,113 @@ export const StudentInterface = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         
         {/* Header */}
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-2">Student Dashboard</h1>
-          <div className="flex items-center justify-center space-x-2 text-muted-foreground">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-semibold text-foreground mb-2">Student View</h1>
+          <div className="flex items-center justify-center space-x-2 text-muted-foreground text-sm">
             <User className="w-4 h-4" />
-            <span>Welcome, {studentName}</span>
+            <span>Logged in as {studentName}</span>
           </div>
         </div>
 
-        {/* Status Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          {/* Connection Status */}
-          <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-success/20 rounded-lg">
-                <CheckCircle className="w-6 h-6 text-success" />
+        {!activePoll ? (
+          /* No Active Poll */
+          <Card className="p-8 bg-card border border-border shadow-card text-center">
+            <div className="space-y-4">
+              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
+                <Clock className="w-8 h-8 text-muted-foreground" />
               </div>
-              <div>
-                <p className="font-semibold">Connected</p>
-                <p className="text-sm text-muted-foreground">Ready to participate</p>
-              </div>
+              <h3 className="text-xl font-semibold text-foreground">Waiting for Poll</h3>
+              <p className="text-muted-foreground">
+                Your teacher hasn't started a poll yet. Please wait for the next question.
+              </p>
             </div>
           </Card>
-
-          {/* Students Count */}
-          <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-primary/20 rounded-lg">
-                <Users className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{students.length}</p>
-                <p className="text-sm text-muted-foreground">Total Students</p>
-              </div>
-            </div>
-          </Card>
-
-          {/* Vote Status */}
-          <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-            <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-lg ${hasVoted ? 'bg-success/20' : 'bg-muted/20'}`}>
-                <Vote className={`w-6 h-6 ${hasVoted ? 'text-success' : 'text-muted-foreground'}`} />
-              </div>
-              <div>
-                <p className="font-semibold">{hasVoted ? 'Voted' : 'Not Voted'}</p>
-                <p className="text-sm text-muted-foreground">
-                  {hasVoted ? 'Answer submitted' : 'Waiting to vote'}
-                </p>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-6">
-          
-          {/* Left Column - Poll Question or Status */}
+        ) : (
           <div className="space-y-6">
-            
-            {!activePoll ? (
-              /* No Active Poll */
-              <Card className="p-8 bg-gradient-card border-border/20 shadow-card text-center">
-                <div className="space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-muted/20 flex items-center justify-center mx-auto">
-                    <Clock className="w-8 h-8 text-muted-foreground" />
+            {/* Timer */}
+            {isTimerActive && <Timer />}
+
+            {/* Poll Question */}
+            <Card className="p-6 bg-card border border-border shadow-card">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-4">Question</h3>
+                  <div className="p-4 bg-muted rounded-lg">
+                    <p className="text-foreground">{activePoll.question}</p>
                   </div>
-                  <h3 className="text-xl font-semibold">Waiting for Poll</h3>
-                  <p className="text-muted-foreground">
-                    Your teacher hasn't started a poll yet. Please wait for the next question.
-                  </p>
                 </div>
-              </Card>
-            ) : (
-              /* Active Poll */
-              <Card className="p-6 bg-gradient-card border-border/20 shadow-card">
-                <div className="space-y-6">
-                  
-                  {/* Timer */}
-                  {isTimerActive && (
-                    <Timer />
-                  )}
 
-                  {/* Poll Question */}
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-semibold">Question</h3>
-                      {hasVoted && (
-                        <Badge variant="secondary" className="bg-success/20 text-success">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Submitted
-                        </Badge>
-                      )}
-                    </div>
-                    
-                    <div className="p-4 bg-muted/20 rounded-lg border border-border/20">
-                      <p className="text-lg">{activePoll.question}</p>
-                    </div>
-                  </div>
-
-                  {/* Poll Options */}
-                  {!hasVoted && !resultsVisible && (
+                {/* Poll Options */}
+                {!hasVoted && !resultsVisible && (
+                  <div className="space-y-4">
                     <div className="space-y-3">
-                      <h4 className="font-semibold">Choose your answer:</h4>
-                      <div className="space-y-2">
-                        {activePoll.options.map((option, index) => (
-                          <button
-                            key={index}
-                            onClick={() => setSelectedOption(index)}
-                            className={`w-full p-4 text-left rounded-lg border-2 transition-all duration-200 ${
+                      {activePoll.options.map((option, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedOption(index)}
+                          className={`w-full p-4 text-left rounded-lg border transition-all duration-200 ${
+                            selectedOption === index
+                              ? 'border-primary bg-primary/5 text-foreground'
+                              : 'border-border bg-background hover:bg-muted/50'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
                               selectedOption === index
-                                ? 'border-primary bg-primary/10 text-primary'
-                                : 'border-border bg-muted/20 hover:bg-muted/30'
-                            }`}
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                                selectedOption === index
-                                  ? 'border-primary bg-primary text-primary-foreground'
-                                  : 'border-muted-foreground'
-                              }`}>
-                                <span className="text-sm font-semibold">
-                                  {String.fromCharCode(65 + index)}
-                                </span>
-                              </div>
-                              <span>{option}</span>
+                                ? 'border-primary bg-primary text-primary-foreground'
+                                : 'border-muted-foreground'
+                            }`}>
+                              <div className={`w-2 h-2 rounded-full ${
+                                selectedOption === index ? 'bg-primary-foreground' : ''
+                              }`} />
                             </div>
-                          </button>
-                        ))}
-                      </div>
-
-                      {/* Submit Button */}
-                      <Button
-                        onClick={handleVoteSubmit}
-                        disabled={selectedOption === null || isSubmitting}
-                        className="w-full bg-gradient-primary hover:bg-primary/90 disabled:opacity-50"
-                      >
-                        {isSubmitting ? (
-                          <div className="flex items-center justify-center">
-                            <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
-                            Submitting...
+                            <span className="text-foreground">{option}</span>
                           </div>
-                        ) : (
-                          <div className="flex items-center justify-center">
-                            <Vote className="w-4 h-4 mr-2" />
-                            Submit Answer
-                          </div>
-                        )}
-                      </Button>
+                        </button>
+                      ))}
                     </div>
-                  )}
 
-                  {/* Waiting for Results */}
-                  {hasVoted && !resultsVisible && (
-                    <div className="text-center p-6 bg-muted/20 rounded-lg border border-border/20">
-                      <div className="space-y-3">
-                        <CheckCircle className="w-12 h-12 text-success mx-auto" />
-                        <h4 className="font-semibold">Answer Submitted!</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Waiting for other students to complete their answers...
-                        </p>
-                        <div className="text-xs text-muted-foreground">
-                          {votes.length} of {students.length} students have voted
+                    <Button
+                      onClick={handleVoteSubmit}
+                      disabled={selectedOption === null || isSubmitting}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center justify-center">
+                          <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" />
+                          Submitting...
                         </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </Card>
-            )}
-          </div>
+                      ) : (
+                        "Submit Answer"
+                      )}
+                    </Button>
+                  </div>
+                )}
 
-          {/* Right Column - Results */}
-          <div>
-            {activePoll && resultsVisible && (
+                {/* Waiting for Results */}
+                {hasVoted && !resultsVisible && (
+                  <div className="text-center p-6 bg-muted rounded-lg">
+                    <div className="space-y-3">
+                      <CheckCircle className="w-12 h-12 text-success mx-auto" />
+                      <h4 className="font-semibold text-foreground">Answer Submitted!</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Waiting for other students to complete their answers...
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            {/* Results */}
+            {resultsVisible && (
               <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <BarChart3 className="w-5 h-5 text-primary" />
-                  <h3 className="text-xl font-semibold">Poll Results</h3>
-                </div>
+                <h3 className="text-lg font-semibold text-foreground">Poll Results</h3>
                 <PollResults />
               </div>
             )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
