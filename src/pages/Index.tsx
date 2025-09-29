@@ -1,14 +1,40 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useAppSelector } from "@/store/hooks";
+import { RoleSelector } from "@/components/RoleSelector";
+import { StudentNameEntry } from "@/components/StudentNameEntry";
+import { TeacherDashboard } from "@/components/TeacherDashboard";
+import { StudentInterface } from "@/components/StudentInterface";
 
+/**
+ * Main Index Page
+ * 
+ * Routes users based on their role and state:
+ * - No role selected: Show role selector
+ * - Student without name: Show name entry
+ * - Teacher: Show teacher dashboard
+ * - Student with name: Show student interface
+ */
 const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const { userRole, studentName } = useAppSelector((state) => state.poll);
+
+  // Route based on user state
+  if (!userRole) {
+    return <RoleSelector />;
+  }
+
+  if (userRole === 'student' && !studentName) {
+    return <StudentNameEntry />;
+  }
+
+  if (userRole === 'teacher') {
+    return <TeacherDashboard />;
+  }
+
+  if (userRole === 'student' && studentName) {
+    return <StudentInterface />;
+  }
+
+  // Fallback (should never reach here)
+  return <RoleSelector />;
 };
 
 export default Index;
